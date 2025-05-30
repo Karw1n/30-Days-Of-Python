@@ -1,0 +1,9 @@
+print(len('Hello, World!')) # counts the number of characters including space
+
+print(str(10)) # converts int to string
+print(int('10')) # converts string to int
+
+input('Enter your name:') # takes user input
+
+print(max(20, 30, 40, 50)) # returns the highest number
+print(sum([20, 30, 40, 50])) # Needs to be in square  brackets
