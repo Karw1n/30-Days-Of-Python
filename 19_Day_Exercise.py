@@ -60,3 +60,14 @@ def most_spoken_langauges(filename, number):
 
 country_file_location = 'file_handling_data/countries_data.json'
 print(most_spoken_langauges(country_file_location, 10))
+print(most_spoken_langauges(country_file_location, 3))
+
+# 3. Read the countries_data.json data file in data directory, create a function that creates a list of the ten most populated countries
+def most_populated_countries(filename, number):
+  with open(filename, encoding='utf-8') as f:
+    data = json.load(f)
+    top_n_pop = sorted(data, key=lambda x: x['population'], reverse=True)[:number]
+    return [(country['name'], country['population']) for country in top_n_pop]    
+
+print(most_populated_countries(country_file_location, 10))
+print(most_populated_countries(country_file_location, 3))
