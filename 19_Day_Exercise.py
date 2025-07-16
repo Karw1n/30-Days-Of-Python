@@ -1,3 +1,6 @@
+import os
+import json
+import csv
 # Day 19 File Handling
 
 # Exercises: Level 1
@@ -31,3 +34,29 @@ line_and_word_counter('Donald Trump', donald_speech)
 melina_trump_speech = '30-Days-Of-Python/file_handling_data/melina_trump_speech.txt'
 line_and_word_counter('Melina Trump', melina_trump_speech)
 
+# 2. Read the countries_data.json data file in data directory, create a function that finds the ten most spoken languages
+def get_unique_langauges(data):
+  unique_languages = set()
+  for country in data:
+    for language in country.get('languages'):
+      unique_languages.add(language)
+  return unique_languages
+
+
+def most_spoken_langauges(filename, number):
+  with open(filename, encoding='utf-8') as f:
+    data = json.load(f)
+    unique_languages = get_unique_langauges(data)
+    
+    languages_spoken = dict.fromkeys(unique_languages, 0)
+    
+    for country in data:
+      for language in country.get('languages'):
+        languages_spoken[language] = languages_spoken[language] + 1
+      
+    top_n = sorted(languages_spoken, key=languages_spoken.get, reverse=True)[:number]
+    return [(language, languages_spoken[language]) for language in top_n]
+    
+
+country_file_location = 'file_handling_data/countries_data.json'
+print(most_spoken_langauges(country_file_location, 10))
