@@ -71,3 +71,15 @@ def most_populated_countries(filename, number):
 
 print(most_populated_countries(country_file_location, 10))
 print(most_populated_countries(country_file_location, 3))
+
+# Exercises: Level 2
+# 4. Extract all incoming email adresses as a list from the email_exchange_big.txt file.
+emails = []
+
+with open('file_handling_data/email_exchanges_big.txt') as f:
+  for line in f:
+    if line.startswith("From "):
+      parts = line.split()
+      if len(parts) > 1:
+        emails.append(parts[1]) 
+        
