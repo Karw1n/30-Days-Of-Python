@@ -1,4 +1,4 @@
-import os
+import re
 import json
 import csv
 # Day 19 File Handling
@@ -90,6 +90,8 @@ michelle_obama_speech = 'file_handling_data\michelle_obama_speech.txt'
 donald_speech = 'file_handling_data\donald_speect.txt'
 melina_trump_speech = 'file_handling_data\melina_trump_speech.txt'
 
+# Use the function, find_most_frequent_words to find: a) The ten most frequent words used in Obama's speech b) The ten most frequent words used in Michelle's speech c) The ten most frequent words used in Trump's speech d) The ten most frequent words used in Melina's speech
+
 def find_most_common_words(filename, number):
   words = {}
   with open(filename) as f:
@@ -110,3 +112,77 @@ print(find_most_common_words(obama_speech, 10))
 print(find_most_common_words(michelle_obama_speech, 10))
 print(find_most_common_words(donald_speech, 10))
 print(find_most_common_words(melina_trump_speech, 10))
+
+# 7. Write a python application that checks similarity between two texts. It takes a file or a string as a parameter and it will evaluate the similarity of the two texts. For instance check the similarity between the transcripts of Michelle's and Melina's speech. You may need a couple of functions, function to clean the text(clean_text), function to remove support words(remove_support_words) and finally to check the similarity(check_text_similarity). List of stop words are in the data directory
+
+stop_words = ['i','me','my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up','down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]
+
+def find_most_common_words_mod(filename, number):
+  words = {}
+  with open(filename) as f:
+    for line in f:
+      for word in line.strip().split():
+        if word in words.keys() and word.isalpha() and word not in stop_words:
+          words[word] = words[word] + 1
+        else:
+          words[word] = 1
+  top_words = sorted(words, key=words.get, reverse=True)[:number]
+  return top_words
+
+def check_text_similarity(file1, file2):
+  similar = 0
+  file1_top_words = find_most_common_words_mod(file1, 10)
+  file2_top_words = find_most_common_words_mod(file2, 10)
+  
+  for word in file1_top_words:
+    if word in file2_top_words:
+      similar += 1
+      
+  if similar < 0:
+    return 'Not Similar'
+  else:
+    return f'Similarity of score: {similar}/10'
+  
+print(check_text_similarity(michelle_obama_speech, melina_trump_speech))
+
+# 8. Find the 10 most repeated words in the romeo_and_juliet.txt
+   
+romeo_juliet_file = 'file_handling_data/romeo_and_juliet.txt'
+print(find_most_common_words_mod(romeo_juliet_file, 10))
+
+# 9. Read the hacker news csv file and find out: a) Count the number of lines containing python or Python b) Count the number lines containing JavaScript, javascript or Javascript c) Count the number lines containing Java and not JavaScript
+hacker_news_file = 'file_handling_data\hacker_news.csv'
+
+def count_word(filename, words):
+  with open(filename) as file:
+    csv_reader = csv.reader(file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+      contains = False
+      for item in row:
+        if any(word in item for word in words):
+          contains = True
+          break
+      if contains:
+        line_count += 1
+  return line_count
+    
+print(count_word(hacker_news_file, ['python', 'Python']))
+print(count_word(hacker_news_file, ['JavaScript', 'javascript', 'Javascript c']))
+
+def count_word_mod(filename, words):
+  with open(filename) as file:
+    csv_reader = csv.reader(file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+      contains = False
+      for item in row:
+        if any(word in item for word in words) and not 'JavaScript':
+          contains = True
+          break
+      if contains:
+        line_count += 1
+  return line_count
+
+print(count_word(hacker_news_file, ['Java']))
+    
