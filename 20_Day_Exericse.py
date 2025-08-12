@@ -30,4 +30,32 @@ print(cats_weight_freq)
 
 cats_weight_freq_sorted = sorted(cats_weight_freq, key=cats_weight_freq.get, reverse=False)
 
-print(f'Max = {cats_weight_freq_sorted[0]}')
+min = cats_weight_freq_sorted[0]
+max = cats_weight_freq_sorted[-1]
+
+print(f'Min = {min} metric units, with {cats_weight_freq[min]} cats having this weight')
+print(f'Max = {max} metric units, with {cats_weight_freq[max]} having this weight')
+
+total_cats = sum(cats_weight_freq.values())
+
+def calculate_mean(dict):
+  total = sum(dict.values())
+  initial_sum = 0
+  for key in dict:
+    initial_sum += key * dict[key]
+  return initial_sum / total
+
+print(f'Mean weight is: {calculate_mean(cats_weight_freq)}')
+
+def calculate_median(dict):
+  total = sum(dict.values())
+  dict_sorted = sorted(dict, key=dict.get, reverse=False)
+  mid = total // 2
+  counter = 0
+  current = dict[dict_sorted[0]]
+  while current < mid:
+    counter += 1
+    current += dict[dict_sorted[counter]]
+  return dict_sorted[counter]
+
+print(f'Median is: {calculate_median(cats_weight_freq)}')
